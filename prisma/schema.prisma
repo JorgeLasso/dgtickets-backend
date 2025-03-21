@@ -13,10 +13,17 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
-
 model Country {
-  id Int @id @default(autoincrement())
-  name String
+  id    Int    @id @default(autoincrement())
+  name  String
   image String
 }
 
+model TicketDemo {
+  id             String    @id @default(uuid())
+  number         Int
+  createdAt      DateTime  @default(now())
+  handleAtModule String?
+  handleAt       DateTime?
+  done           Boolean
+}

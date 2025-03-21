@@ -1,5 +1,7 @@
 import { UuidAdapter } from "../../config/uuid.adapter";
 import { Ticket } from "../../domain/interfaces/ticket";
+import { Request, Response } from "express";
+import { prisma } from "../../data/postgres";
 
 export class TicketService {
   public readonly _tickets: Ticket[] = [
@@ -7,84 +9,133 @@ export class TicketService {
       id: UuidAdapter.v4(),
       number: 1,
       createdAt: new Date(),
-      done: false
+      done: false,
     },
     {
       id: UuidAdapter.v4(),
       number: 2,
       createdAt: new Date(),
-      done: false
+      done: false,
     },
     {
       id: UuidAdapter.v4(),
       number: 3,
       createdAt: new Date(),
-      done: false
+      done: false,
     },
     {
       id: UuidAdapter.v4(),
       number: 4,
       createdAt: new Date(),
-      done: false
+      done: false,
     },
     {
       id: UuidAdapter.v4(),
       number: 5,
       createdAt: new Date(),
-      done: false
+      done: false,
     },
-
   ];
 
   private readonly workingOnTickets: Ticket[] = [];
 
-  public get pendingTickets(): Ticket[] {
-    return this._tickets.filter(ticket => !ticket.handleAtModule && !ticket.done);
-  }
+  public pendingTickets = async (req: Request, res: Response) => {
+    const tickets = await prisma.ticketDemo.findMany({
+      where: {
+        handleAtModule: {
+          not: null,
+        },
+        done: {
+          not: false,
+        },
+      },
+    });
+    res.json(tickets);
+    return;
+  };
 
   public get lastWorkingOnTickets(): Ticket[] {
     return this.workingOnTickets.splice(0, 5);
   }
 
-  public get lastTicketNumber():number {
-    return this._tickets.length > 0 ? this._tickets.at(-1)!.number : 0;
-  }
+  public lastTicketNumber = async (req: Request, res: Response) => {
+    const lastTicket = await prisma.ticketDemo.findFirst({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    const lastTicketNumber = lastTicket ? lastTicket.number : 0;
+    res.json(lastTicketNumber);
+    return;
+  };
 
-  public createTicket() {
-    const ticket: Ticket = {
-      id: UuidAdapter.v4(),
-      number: this.lastTicketNumber + 1,
-      createdAt: new Date(),
-      done: false
-    }
-    this._tickets.push(ticket);
-    return ticket;
-  }
+  public createTicket = async (req: Request, res: Response) => {
+    const { number } = req.body;
 
-  public drawTicket(module: string) {
-    const ticket = this._tickets.find(ticket => !ticket.handleAtModule);
-    if(!ticket) {
-      return { status: 'error' , message: 'No tickets available'};
-    }
-    ticket.handleAtModule = module;
-    ticket.HandleAt = new Date();
-
-    this.workingOnTickets.unshift({...ticket});
-
-    return { status: 'success', ticket };
-  }
-
-  public onFinishedTicket(ticketId: string) {
-    const ticket = this._tickets.find(ticket => ticket.id === ticketId);
-    if(!ticket) return { status: 'error', message: 'Ticket not found' };
-  
-    this._tickets.map(ticket => {
-      if(ticket.id === ticketId) {
-        ticket.done = true;
-      }
-      return ticket;
+    const newTicket = await prisma.ticketDemo.create({
+      data: {
+        id: UuidAdapter.v4(),
+        number,
+        done: false,
+      },
     });
 
-    return { status: 'success', ticket };
-  }
+    res.json(newTicket);
+    return;
+  };
+
+  public drawTicket = async (req: Request, res: Response) => {
+    const { module } = req.body;
+
+    const ticket = await prisma.ticketDemo.findFirst({
+      where: {
+        handleAtModule: {
+          not: null,
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    if (!ticket) {
+      return { status: "error", message: "No tickets available" };
+    }
+
+    const updatedTicket = await prisma.ticketDemo.update({
+      where: { id: ticket.id },
+      data: {
+        handleAtModule: module,
+        handleAt: new Date(),
+      },
+    });
+
+    res.json(updatedTicket);
+    return;
+  };
+
+  public onFinishedTicket = async (req: Request, res: Response) => {
+    const { ticketId } = req.body;
+
+    const ticket = await prisma.ticketDemo.findFirst({
+      where: {
+        id: ticketId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    if (!ticket) return { status: "error", message: "Ticket not found" };
+
+    const updatedTicket = await prisma.ticketDemo.update({
+      where: { id: ticket.id },
+      data: {
+        done: true,
+      },
+    });
+
+    res.json(updatedTicket);
+    return;
+  };
 }
