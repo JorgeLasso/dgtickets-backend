@@ -50,8 +50,7 @@ export class TicketService {
         },
       },
     });
-    res.json(tickets);
-    return;
+    return tickets;
   };
 
   public get lastWorkingOnTickets(): Ticket[] {
@@ -65,8 +64,7 @@ export class TicketService {
       },
     });
     const lastTicketNumber = lastTicket ? lastTicket.number : 0;
-    res.json(lastTicketNumber);
-    return;
+    return lastTicketNumber;
   };
 
   public createTicket = async (req: Request, res: Response) => {
@@ -79,13 +77,11 @@ export class TicketService {
         done: false,
       },
     });
-
-    res.json(newTicket);
-    return;
+    
+    return newTicket;
   };
 
-  public drawTicket = async (req: Request, res: Response) => {
-    const { module } = req.body;
+  public drawTicket = async (module: string) => {
 
     const ticket = await prisma.ticketDemo.findFirst({
       where: {
@@ -110,12 +106,10 @@ export class TicketService {
       },
     });
 
-    res.json(updatedTicket);
-    return;
+    return updatedTicket;
   };
 
-  public onFinishedTicket = async (req: Request, res: Response) => {
-    const { ticketId } = req.body;
+  public onFinishedTicket = async (ticketId: string) => {
 
     const ticket = await prisma.ticketDemo.findFirst({
       where: {
@@ -135,7 +129,6 @@ export class TicketService {
       },
     });
 
-    res.json(updatedTicket);
-    return;
+    return updatedTicket;
   };
 }
