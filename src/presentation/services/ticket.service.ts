@@ -39,7 +39,7 @@ export class TicketService {
 
   private readonly workingOnTickets: Ticket[] = [];
 
-  public pendingTickets = async (req: Request, res: Response) => {
+  public pendingTickets = async () => {
     const tickets = await prisma.ticketDemo.findMany({
       where: {
         handleAtModule: {
@@ -57,7 +57,7 @@ export class TicketService {
     return this.workingOnTickets.splice(0, 5);
   }
 
-  public lastTicketNumber = async (req: Request, res: Response) => {
+  public lastTicketNumber = async () => {
     const lastTicket = await prisma.ticketDemo.findFirst({
       orderBy: {
         createdAt: "desc",
@@ -67,8 +67,7 @@ export class TicketService {
     return lastTicketNumber;
   };
 
-  public createTicket = async (req: Request, res: Response) => {
-    const { number } = req.body;
+  public createTicket = async ( number: number ) => {
 
     const newTicket = await prisma.ticketDemo.create({
       data: {
@@ -77,7 +76,7 @@ export class TicketService {
         done: false,
       },
     });
-    
+
     return newTicket;
   };
 

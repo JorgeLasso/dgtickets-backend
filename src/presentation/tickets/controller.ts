@@ -20,7 +20,8 @@ export class TicketController{
   }
 
   public createTicket = async (req: Request, res: Response) => {
-    res.status(201).json(this.ticketService.createTicket());
+    const number = +req.body;
+    res.status(201).json(this.ticketService.createTicket( number ));
   }
 
   public drawTicket = async (req: Request, res: Response) => {
