@@ -21,7 +21,7 @@ model Country {
 
 model TicketDemo {
   id             String    @id @default(uuid())
-  number         Int?
+  number         Int
   createdAt      DateTime  @default(now())
   handleAtModule String?
   handleAt       DateTime?

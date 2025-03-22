@@ -8,32 +8,39 @@ export class TicketController{
   ){}
 
   public getTickets = async (req: Request, res: Response) => {
-    res.json(this.ticketService._tickets);
+    const tickets = await this.ticketService.getTickets();
+    res.status(201).json(tickets);
   }
 
   public getLastTicket = async (req: Request, res: Response) => { 
-    res.json(this.ticketService.lastTicketNumber);
+    const lastTicket = await this.ticketService.getLastTicketNumber();
+    res.status(201).json(lastTicket);
   }
 
   public pendingTickets = async (req: Request, res: Response) => {
-    res.json(this.ticketService.pendingTickets);
+    const pendingTickets = await this.ticketService.getPendingTickets();
+    res.status(201).json(pendingTickets);
   }
 
   public createTicket = async (req: Request, res: Response) => {
-    res.status(201).json(this.ticketService.createTicket( ));
+    const newTicket = await this.ticketService.createTicket();
+    res.status(201).json(newTicket);
   }
 
   public drawTicket = async (req: Request, res: Response) => {
     const { module } = req.params;
-    res.json(this.ticketService.drawTicket(module));
+    const ticket = await this.ticketService.drawTicket(module);
+    res.status(201).json(ticket);
   }
 
   public ticketFinished = async (req: Request, res: Response) => {
     const { ticketId } = req.params;
-    res.json(this.ticketService.onFinishedTicket(ticketId));
+   const ticket = await this.ticketService.onFinishedTicket(ticketId);
+    res.status(201).json(ticket);
   }
 
   public workingOn = async (req: Request, res: Response) => {
-    res.json(this.ticketService.lastWorkingOnTickets);
+    const workingOnTickets = await this.ticketService.getLastWorkingOnTickets();
+    res.status(201).json(workingOnTickets);
   }
 }
