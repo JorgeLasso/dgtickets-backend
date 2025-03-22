@@ -67,12 +67,12 @@ export class TicketService {
     return lastTicketNumber;
   };
 
-  public createTicket = async ( number: number ) => {
-
+  public createTicket = async (  ) => {
+    const lastTicketNumber = await this.lastTicketNumber();
     const newTicket = await prisma.ticketDemo.create({
       data: {
         id: UuidAdapter.v4(),
-        number,
+        number: lastTicketNumber! + 1,
         done: false,
       },
     });
