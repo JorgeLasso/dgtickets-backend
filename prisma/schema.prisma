@@ -13,6 +13,12 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
+enum Role {
+  ADMIN_ROLE
+  USER_ROLE
+  ADVISER_ROLE
+}
+
 model Country {
   id    Int    @id @default(autoincrement())
   name  String
@@ -26,4 +32,15 @@ model TicketDemo {
   handleAtModule String?
   handleAt       DateTime?
   done           Boolean
+}
+
+model User {
+  id             Int    @id @default(autoincrement())
+  firstName      String
+  lastName       String
+  photo          String?
+  userType       Role    @default(USER_ROLE)
+  email          String
+  emailValidated Boolean @default(false)
+  password       String
 }
