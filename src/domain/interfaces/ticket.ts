@@ -2,7 +2,7 @@ export interface Ticket {
   id: string,
   number: number,
   createdAt: Date,
-  handleAtModule?: string,
+  handleAtModule?: string | null,
   HandleAt?: Date,
   done: boolean,
 }
