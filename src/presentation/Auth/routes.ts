@@ -27,6 +27,9 @@ export class AuthRoutes {
     router.post('/register', controller.registerUser );
 
     router.get('/validate-email/:token', controller.validateEmail );
+    router.post('/recovery-password', controller.recoveryPassword );
+    router.post('/update-password', controller.updatePassword );
+    
 
 
 

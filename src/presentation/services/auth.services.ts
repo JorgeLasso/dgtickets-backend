@@ -1,6 +1,6 @@
 import { bcryptAdapter, envs, JwtAdapter } from "../../config";
 import { prisma } from "../../data/postgres";
-import { CustomError, LoginUserDto, RegisterUserDto, UserEntity } from "../../domain";
+import { CustomError, LoginUserDto, RecoveryUserDto, RegisterUserDto, UpdatePasswordDto, UserEntity } from "../../domain";
 import { EmailService } from "./email.service";
 
 
@@ -32,8 +32,9 @@ export class AuthService {
         
 
             await this.sendEmailValiadtionLink( user.email );
-           
-            const { password, ...userEntity } = UserEntity.fromObject(user);
+
+            // const { password, emailValidated, photo, userType, id, ...userEntity } = UserEntity.fromObject(user);
+            const userEntity = UserEntity.fromObject(user);
 
             const token = await JwtAdapter.generateToken({ id: user.id });
             if( !token ) throw CustomError.internalServer('Error while creating JWT');
@@ -47,7 +48,6 @@ export class AuthService {
             throw CustomError.internalServer(`${error}`);
         }
 
-
     }
 
     public async loginUser( loginUserDto: LoginUserDto ) {
@@ -58,6 +58,8 @@ export class AuthService {
 
         const isMatching = bcryptAdapter.compare(loginUserDto.password, user.password);
         if( !isMatching ) throw CustomError.badRequest('Password is not valid');
+
+        if( !user.emailValidated ) throw CustomError.unauthorized('Email not activated');
 
         // const { userEntity } = UserEntity.fromObject(user);
 
@@ -96,9 +98,33 @@ export class AuthService {
         return true;
     }
 
+    private sendEmailRecoveryLink = async( email: string ) => {
+
+        const token = await JwtAdapter.generateToken({ email });
+        if( !token  ) throw CustomError.internalServer('Error getting token');
+
+        const link = `${ envs.WEBSERVICE_URL }/auth/validate-email/${ token }`;
+        const html = `
+            <h1>Recovery your password</h1>
+            <p>Click on the following link to update your password</p>
+            <a href="${ link }">Recovery your password: ${ email }</a>
+        `;
+
+        const options = {
+            to: email,
+            subject: 'Recovery your password',
+            htmlBody: html
+        }
+
+        const isSent = await this.emailService.sendEmail(options);
+        if( !isSent ) throw CustomError.internalServer('Error sending email');
+
+        return true;
+    }
+
     public validateEmail = async ( token: string ) => {
 
-        const payload = await JwtAdapter.validateToekn(token);
+        const payload = await JwtAdapter.validateToken(token);
         if( !payload ) throw CustomError.unauthorized('Invalid token');
 
         const { email } = payload as { email: string };
@@ -115,7 +141,59 @@ export class AuthService {
 
 
         return true;
+    }
+
+    public recoveryPassword = async( recoveryUserDto: RecoveryUserDto ) => {
+
+        const user = await prisma.user.findFirst({ where: { email: recoveryUserDto.email } });
+        if( !user ) throw CustomError.badRequest('Email not exist');
 
 
+        try {
+        
+
+            await this.sendEmailRecoveryLink( user.email );
+
+            const { password, emailValidated, photo, userType, id, ...userEntity } = UserEntity.fromObject(user);
+
+            const token = await JwtAdapter.generateToken({ id: user.id });
+            if( !token ) throw CustomError.internalServer('Error while creating JWT');
+
+            return {
+                user: userEntity,
+                token
+            }
+
+        } catch(error) {
+            throw CustomError.internalServer(`${error}`);
+        }
+    }
+
+    public updatedPassword = async( updatePasswordDto: UpdatePasswordDto ) => {
+
+        const user = await prisma.user.findFirst({ where: { email: updatePasswordDto.email } });
+        if( !user ) throw CustomError.badRequest('Email not exist');
+
+        const payload = await JwtAdapter.validateToken(updatePasswordDto.token);
+        if( !payload ) throw CustomError.unauthorized('Invalid token');
+
+
+        try {
+
+            await prisma.user.update({
+                where: { id: user.id },
+                data: { password: bcryptAdapter.hash(updatePasswordDto.password) },
+              });
+
+              const userEntity = UserEntity.fromObject(user);
+        
+
+            return {
+                user: userEntity
+            }
+
+        } catch(error) {
+            throw CustomError.internalServer(`${error}`);
+        }
     }
 }

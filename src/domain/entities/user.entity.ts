@@ -15,7 +15,7 @@ export class UserEntity {
     ) {}
 
     static fromObject( object: { [key: string]: any } ) {
-        const {firstName, lastName, email, emailValidated, password, userType, photo } = object;
+        const {id, firstName, lastName, photo, userType, email, emailValidated, password } = object;
 
 
         // if( id ) {
@@ -29,7 +29,7 @@ export class UserEntity {
         if( !password ) throw CustomError.badRequest('Missing password');
         if( !userType ) throw CustomError.badRequest('Missing userType');
 
-        return new UserEntity( firstName, lastName, email, emailValidated, password, userType, photo ); 
+        return new UserEntity( id, firstName, lastName, email, emailValidated, password, userType, photo ); 
 
     }
 

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CustomError, LoginUserDto, RegisterUserDto } from "../../domain";
+import { CustomError, LoginUserDto, RecoveryUserDto, RegisterUserDto, UpdatePasswordDto } from "../../domain";
 import { AuthService } from "../services/auth.services";
 
 
@@ -57,6 +57,31 @@ export class AuthController {
         const { token } = req.params;
         this.authService.validateEmail( token )
             .then( () => res.json('Email validated') )
+            .catch( (error) => this.handleError(error, res) );
+    }
+
+    recoveryPassword = ( req: Request, res: Response ) => {
+        const [error, recoveryDto] = RecoveryUserDto.create( req.body );
+        if( error ) {
+            res.status(400).json({error});
+            return;
+        }
+
+        this.authService.recoveryPassword( recoveryDto! )
+            .then( (user) => res.json(user) )
+            .catch( (error) => this.handleError(error, res) );
+    }
+
+    updatePassword = ( req: Request, res: Response ) => {
+        
+        const [error, updatePasswordDto] = UpdatePasswordDto.create( req.body );
+        if( error ) {
+            res.status(400).json({error});
+            return;
+        }
+
+        this.authService.updatedPassword( updatePasswordDto! )
+            .then( (user) => res.json(user) )
             .catch( (error) => this.handleError(error, res) );
     }
 
