@@ -12,12 +12,12 @@ export class AppRoutes {
     static get routes(): Router {
         const router = Router();
 
-        router.use( '/api/countries', CountryRoutes.routes );
+        router.use( '/api/countries', [ AuthMiddlewre.validateJWT ], CountryRoutes.routes );
 
         router.use( '/api/tickets', [ AuthMiddlewre.validateJWT ], TicketRoutes.routes );
 
         router.use('/api/auth', AuthRoutes.routes );
-        router.use('/api/states', StateRoutes.routes );
+        router.use('/api/states', [ AuthMiddlewre.validateJWT ], StateRoutes.routes );
 
 
 

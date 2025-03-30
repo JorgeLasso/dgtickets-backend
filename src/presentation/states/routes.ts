@@ -20,7 +20,6 @@ export class StateRoutes {
         router.get( '/:id', statesController.getStateById );
         router.post( '/', statesController.createState );
         router.put( '/', statesController.updateState );
-        // router.post('/', [ AuthMiddlewre.validateJWT ], countryController.createCountry );
 
 
 
