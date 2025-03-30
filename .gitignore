@@ -5,5 +5,5 @@ dist/
 DS_Store
 /postgres/
 logs/
-
+coverage/
 .env
