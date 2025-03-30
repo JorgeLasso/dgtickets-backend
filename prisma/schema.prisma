@@ -23,6 +23,15 @@ model Country {
   id    Int    @id @default(autoincrement())
   name  String
   image String
+  states State[]
+}
+
+model State {
+  id        Int     @id @default(autoincrement())
+  name      String
+  image     String
+  countryId Int
+  country   Country @relation(fields: [countryId], references: [id])
 }
 
 model TicketDemo {
