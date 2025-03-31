@@ -89,7 +89,7 @@ model User {
   lastName       String
   photo          String?
   userType       Role     @default(USER_ROLE)
-  email          String
+  email          String   @unique
   emailValidated Boolean  @default(false)
   password       String
   isActive       Boolean  @default(true)

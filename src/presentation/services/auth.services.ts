@@ -26,14 +26,14 @@ export class AuthService {
                     lastName: registerUserDto.lastName,
                     email: registerUserDto.email,
                     password: bcryptAdapter.hash(registerUserDto.password),
-                    photo: registerUserDto.photo
+                    photo: registerUserDto.photo,
+                    cityId: registerUserDto.cityId
                 }
             })
         
 
             await this.sendEmailValiadtionLink( user.email );
-
-            // const { password, emailValidated, photo, userType, id, ...userEntity } = UserEntity.fromObject(user);
+            
             const userEntity = UserEntity.fromObject(user);
 
             const token = await JwtAdapter.generateToken({ id: user.id });

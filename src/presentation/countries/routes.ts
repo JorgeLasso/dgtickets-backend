@@ -17,7 +17,6 @@ export class CountryRoutes {
         router.get( '/:id', countryController.getCountryById );
         router.post( '/', countryController.createCountry );
         router.put( '/', countryController.updateCountry );
-        // router.post('/', [ AuthMiddlewre.validateJWT ], countryController.createCountry );
 
 
 

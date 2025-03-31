@@ -4,6 +4,7 @@ import { TicketRoutes } from "./tickets/routes";
 import { AuthRoutes } from "./Auth/routes";
 import { AuthMiddlewre } from "./middlewares/auth.middleware";
 import { StateRoutes } from "./states/routes";
+import { UsersRoutes } from "./users/router";
 
 
 export class AppRoutes {
@@ -18,6 +19,7 @@ export class AppRoutes {
 
         router.use('/api/auth', AuthRoutes.routes );
         router.use('/api/states', [ AuthMiddlewre.validateJWT ], StateRoutes.routes );
+        router.use('/api/users', [ AuthMiddlewre.validateJWT ], UsersRoutes.routes );
 
 
 
