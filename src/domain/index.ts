@@ -16,5 +16,8 @@ export * from './dtos/state/update-state.dto';
 export * from './dtos/user/create-user.dto';
 export * from './dtos/user/get-by-id-user.dto';
 export * from './dtos/user/update-user.dto';
+export * from './dtos/city/create-city.dto';
+export * from './dtos/city/get-by-id-city.dto';
+export * from './dtos/city/update-city.dto';
 
 export * from './dtos/shared/pagination.dto';

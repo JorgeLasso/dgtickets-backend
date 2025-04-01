@@ -1,6 +1,6 @@
 
 
-export class CreateCountryDto {
+export class UpdateCityDto {
 
     private constructor(
         public readonly name: string,
@@ -8,15 +8,15 @@ export class CreateCountryDto {
     ){}
 
 
-    static create( object: { [key: string]: any } ): [string?, CreateCountryDto?] {
+    static create( object: { [key: string]: any } ): [string?, UpdateCityDto?] {
 
-        const { name, image = '' } = object;
+        const { name, image = false } = object;
 
         if( !name ) return [ 'Missing name' ];
         if( !image ) return [ 'Missing image' ];
 
 
-        return [undefined, new CreateCountryDto(name, image)];
+        return [undefined, new UpdateCityDto(name, image)];
 
 
     }

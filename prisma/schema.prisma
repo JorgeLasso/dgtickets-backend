@@ -29,7 +29,7 @@ enum TicketStatus {
 
 model Country {
   id       Int     @id @default(autoincrement())
-  name     String
+  name     String  @unique
   image    String
   isActive Boolean @default(true)
   states   State[]
@@ -37,7 +37,7 @@ model Country {
 
 model State {
   id        Int     @id @default(autoincrement())
-  name      String
+  name      String  @unique
   image     String
   isActive  Boolean @default(true)
   countryId Int
@@ -47,7 +47,7 @@ model State {
 
 model City {
   id           Int           @id @default(autoincrement())
-  name         String
+  name         String        @unique
   image        String
   isActive     Boolean       @default(true)
   stateId      Int

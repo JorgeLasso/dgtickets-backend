@@ -8,7 +8,6 @@ import {
   UpdateCountryDto,
   UpdateStateDto,
 } from "../../domain";
-import { CountryService } from "../services/country.service";
 import { StateService } from "../services/state.service";
 import { GetStateByIdDto } from "../../domain/dtos/state/get-by-id-state.dto";
 

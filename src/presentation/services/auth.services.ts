@@ -18,6 +18,9 @@ export class AuthService {
 
         if( existUser ) throw CustomError.badRequest('Email already exist');
 
+        const existCity = await prisma.user.findFirst({ where: { cityId: +registerUserDto.cityId } });
+        if( !existCity ) throw CustomError.badRequest('City not exist');
+
 
         try {
             const user = await prisma.user.create({
@@ -27,7 +30,7 @@ export class AuthService {
                     email: registerUserDto.email,
                     password: bcryptAdapter.hash(registerUserDto.password),
                     photo: registerUserDto.photo,
-                    cityId: registerUserDto.cityId
+                    cityId: +registerUserDto.cityId
                 }
             })
         

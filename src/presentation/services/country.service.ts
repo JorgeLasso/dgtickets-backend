@@ -22,7 +22,7 @@ export class CountryService {
       const country = await prisma.country.create({
         data: {
           name: createCountryDto.name,
-          image: createCountryDto.image,
+          image: createCountryDto.image!,
         },
       });
 

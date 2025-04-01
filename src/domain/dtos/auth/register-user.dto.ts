@@ -26,7 +26,7 @@ export class RegisterUserDto {
         if( !cityId ) return [ 'Missing city' ];
         if( isNaN(cityId) ) return [ `${cityId} is not a number`];
     
-        return [undefined, new RegisterUserDto( firstName, lastName, email, password, photo, cityId )];
+        return [undefined, new RegisterUserDto( firstName, lastName, email, password, cityId, photo )];
     }
 
 }
