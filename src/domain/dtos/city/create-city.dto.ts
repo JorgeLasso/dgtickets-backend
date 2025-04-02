@@ -15,6 +15,7 @@ export class CreateCityDto {
 
         if( !name ) return [ 'Missing name' ];
         if( !stateId ) return [ 'Missing state' ];
+        if( isNaN(stateId) ) return [ `stateId is not a valid type`];
         if( !image ) return [ 'Missing image' ];
 
 

@@ -4,8 +4,10 @@ import { TicketRoutes } from "./tickets/routes";
 import { AuthRoutes } from "./Auth/routes";
 import { AuthMiddlewre } from "./middlewares/auth.middleware";
 import { StateRoutes } from "./states/routes";
-import { UsersRoutes } from "./users/router";
-import { CityRoutes } from "./city/routes";
+import { UserRoutes } from "./users/router";
+import { CityRoutes } from "./cities/routes";
+import { HeadquarterRoutes } from "./headquarter/routes";
+import { TicketRoutes_ } from "./tickets_/router";
 
 export class AppRoutes {
   static get routes(): Router {
@@ -23,8 +25,10 @@ export class AppRoutes {
     );
     router.use("/api/auth", AuthRoutes.routes);
     router.use("/api/states", [AuthMiddlewre.validateJWT], StateRoutes.routes);
-    router.use("/api/users", [AuthMiddlewre.validateJWT], UsersRoutes.routes);
+    router.use("/api/users", [AuthMiddlewre.validateJWT], UserRoutes.routes);
     router.use("/api/cities", [AuthMiddlewre.validateJWT], CityRoutes.routes);
+    router.use("/api/headquarters", HeadquarterRoutes.routes);
+    router.use("/api/tickets_", TicketRoutes_.routes);
 
     return router;
   }

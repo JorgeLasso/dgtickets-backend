@@ -15,6 +15,7 @@ export class CreateStateDto {
 
         if( !name ) return [ 'Missing name' ];
         if( !countryId ) return [ 'Missing countryId' ];
+        if( isNaN(countryId) ) return [ `countryId is not a valid type`];
         if( !image ) return [ 'Missing image' ];
 
 

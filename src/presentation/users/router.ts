@@ -4,7 +4,7 @@ import { UsersController } from "./controller";
 
 
 
-export class UsersRoutes {
+export class UserRoutes {
 
 
     static get routes(): Router {

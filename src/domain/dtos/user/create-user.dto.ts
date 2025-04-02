@@ -25,6 +25,8 @@ export class CreateUserDto {
         if( !password ) return [ 'Missing password' ];
         if( password.length < 6 ) return [ 'Password must be at least 6 characters' ];
         if( !cityId ) return [ 'Missing city' ];
+        if( isNaN(cityId) ) return [ `cityId is not a valid type`];
+
     
         return [undefined, new CreateUserDto( firstName, lastName, userType, email, password, cityId, photo )];
     }

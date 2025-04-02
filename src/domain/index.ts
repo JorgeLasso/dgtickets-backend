@@ -19,5 +19,11 @@ export * from './dtos/user/update-user.dto';
 export * from './dtos/city/create-city.dto';
 export * from './dtos/city/get-by-id-city.dto';
 export * from './dtos/city/update-city.dto';
+export * from './dtos/headquarter/create-headquarter.dto';
+export * from './dtos/headquarter/get-by-id-headquarter.dto';
+export * from './dtos/headquarter/update-headquarter.dto';
+export * from './dtos/ticket/create-ticket.dto';
+export * from './dtos/ticket/update-ticket.dto';
+export * from './dtos/ticket/get-by-id-ticket.dto';
 
 export * from './dtos/shared/pagination.dto';

@@ -58,7 +58,7 @@ model City {
 
 model Headquarter {
   id          Int              @id @default(autoincrement())
-  name        String
+  name        String           @unique
   address     String
   phoneNumber String
   email       String
@@ -122,6 +122,7 @@ model Ticket {
   ticketType    TicketStatus @default(PENDING)
   orderDate     DateTime     @default(now())
   serviceData   DateTime?
+  priority      Boolean      @default(false)
   headquarterId Int
   userId        Int
   moduleId      Int?

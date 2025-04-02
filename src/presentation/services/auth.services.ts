@@ -71,7 +71,8 @@ export class AuthService {
 
 
         return {
-            token: token
+            user,
+            token
         }
 
 
@@ -106,7 +107,7 @@ export class AuthService {
         const token = await JwtAdapter.generateToken({ email });
         if( !token  ) throw CustomError.internalServer('Error getting token');
 
-        const link = `${ envs.WEBSERVICE_URL }/auth/validate-email/${ token }`;
+        const link = `${ envs.WEBSERVICE_URL }/recovery-password/${ token }`;
         const html = `
             <h1>Recovery your password</h1>
             <p>Click on the following link to update your password</p>
