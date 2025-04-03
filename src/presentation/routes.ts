@@ -20,13 +20,13 @@ export class AppRoutes {
     );
     router.use(
       "/api/tickets",
-      [AuthMiddlewre.validateJWT],
+      
       TicketRoutes.routes
     );
     router.use("/api/auth", AuthRoutes.routes);
     router.use("/api/states", [AuthMiddlewre.validateJWT], StateRoutes.routes);
     router.use("/api/users", [AuthMiddlewre.validateJWT], UserRoutes.routes);
-    router.use("/api/cities", [AuthMiddlewre.validateJWT], CityRoutes.routes);
+    router.use("/api/cities", CityRoutes.routes);
     router.use("/api/headquarters", [AuthMiddlewre.validateJWT], HeadquarterRoutes.routes);
     router.use("/api/tickets_", [AuthMiddlewre.validateJWT], TicketRoutes_.routes);
 

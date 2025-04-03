@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { CitiesController } from "./controller";
 import { CityService } from "../services/city.service";
+import { AuthMiddlewre } from "../middlewares/auth.middleware";
 
 
 
@@ -14,8 +15,8 @@ export class CityRoutes {
 
         router.get( '/', cityController.getCities );
         router.get( '/:id', cityController.getCityById );
-        router.post( '/', cityController.createCity );
-        router.put( '/', cityController.updateCity );
+        router.post( '/', [AuthMiddlewre.validateJWT], cityController.createCity );
+        router.put( '/',[AuthMiddlewre.validateJWT], cityController.updateCity );
 
 
 

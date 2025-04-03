@@ -18,7 +18,7 @@ export class AuthService {
 
         if( existUser ) throw CustomError.badRequest('Email already exist');
 
-        const existCity = await prisma.user.findFirst({ where: { cityId: +registerUserDto.cityId } });
+        const existCity = await prisma.city.findFirst({ where: { id: +registerUserDto.cityId } });
         if( !existCity ) throw CustomError.badRequest('City not exist');
 
 
@@ -83,7 +83,7 @@ export class AuthService {
         const token = await JwtAdapter.generateToken({ email });
         if( !token  ) throw CustomError.internalServer('Error getting token');
 
-        const link = `${ envs.WEBSERVICE_URL }/auth/validate-email/${ token }`;
+        const link = `${ envs.WEBSERVICE_URL }/auth/validate-email?token=${ token }`;
         const html = `
             <h1>Validate your email</h1>
             <p>Click on the following link to validate your email</p>
@@ -107,7 +107,7 @@ export class AuthService {
         const token = await JwtAdapter.generateToken({ email });
         if( !token  ) throw CustomError.internalServer('Error getting token');
 
-        const link = `${ envs.WEBSERVICE_URL }/recovery-password/${ token }`;
+        const link = `${ envs.WEBSERVICE_URL }/auth/recovery-password?token=${ token }`;
         const html = `
             <h1>Recovery your password</h1>
             <p>Click on the following link to update your password</p>
